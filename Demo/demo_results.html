@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Demo — Persistencia Políglota · Inventario Rural</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--pg:#22d3ee;--mongo:#4ade80;--bg:#050b14;--card:#0f2236;--border:#1a3a55;--text:#e2f0ff;--muted:#607d9a;--accent:#f0a500}
+body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;background-image:radial-gradient(ellipse 80% 60% at 10% 0%,rgba(34,211,238,.07) 0%,transparent 60%),radial-gradient(ellipse 60% 50% at 90% 100%,rgba(74,222,128,.06) 0%,transparent 60%)}
+header{padding:3rem 4rem 2rem;border-bottom:1px solid var(--border);display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+h1{font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;background:linear-gradient(90deg,var(--pg),var(--mongo));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+header p{font-family:'Space Mono',monospace;color:var(--muted);font-size:.8rem;margin-top:.4rem}
+.badges{display:flex;gap:.6rem;flex-wrap:wrap}
+.hbadge{font-family:'Space Mono',monospace;font-size:.7rem;padding:.35rem .8rem;border-radius:4px;font-weight:700;text-transform:uppercase}
+.hbadge.pg{background:rgba(34,211,238,.12);color:var(--pg);border:1px solid rgba(34,211,238,.25)}
+.hbadge.mongo{background:rgba(74,222,128,.12);color:var(--mongo);border:1px solid rgba(74,222,128,.25)}
+.hbadge.date{background:rgba(240,165,0,.1);color:var(--accent);border:1px solid rgba(240,165,0,.2)}
+main{padding:2.5rem 4rem;display:grid;gap:2rem}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+@media(max-width:900px){main{padding:1.5rem}.grid-2{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;position:relative;animation:fadeUp .5s ease both}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--pg),var(--mongo))}
+.card.pg::before{background:var(--pg)}.card.mongo::before{background:var(--mongo)}
+.card-header{padding:1.2rem 1.5rem .8rem;display:flex;align-items:center;gap:.7rem;border-bottom:1px solid var(--border)}
+.card-header h2{font-size:1rem;font-weight:700}
+.layer-badge{font-family:'Space Mono',monospace;font-size:.65rem;padding:.2rem .5rem;border-radius:3px;font-weight:700;text-transform:uppercase;margin-left:auto}
+.layer-badge.pg{background:rgba(34,211,238,.15);color:var(--pg);border:1px solid rgba(34,211,238,.3)}
+.layer-badge.mongo{background:rgba(74,222,128,.15);color:var(--mongo);border:1px solid rgba(74,222,128,.3)}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th{text-align:left;padding:.7rem 1.2rem;font-family:'Space Mono',monospace;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);background:rgba(255,255,255,.02);border-bottom:1px solid var(--border)}
+td{padding:.7rem 1.2rem;border-bottom:1px solid rgba(26,58,85,.5)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+tr.alert td{color:#fca5a5;background:rgba(239,68,68,.04)}
+.badge{font-family:'Space Mono',monospace;font-size:.68rem;padding:.2rem .55rem;border-radius:3px;font-weight:700;text-transform:uppercase}
+.badge-green{background:rgba(74,222,128,.15);color:#4ade80;border:1px solid rgba(74,222,128,.3)}
+.badge-yellow{background:rgba(250,204,21,.12);color:#facc15;border:1px solid rgba(250,204,21,.3)}
+.badge-red{background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.3)}
+.trigger-box{background:#020c14;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.trigger-header{padding:1rem 1.5rem;background:rgba(240,165,0,.07);border-bottom:1px solid rgba(240,165,0,.2);font-family:'Space Mono',monospace;font-size:.8rem;color:var(--accent)}
+pre.sql-code{font-family:'Space Mono',monospace;font-size:.78rem;line-height:1.7;padding:1.5rem;color:#a5d6ff;overflow-x:auto}
+pre.sql-code .kw{color:#f0a500;font-weight:700}
+pre.sql-code .cmt{color:#4b6a88;font-style:italic}
+.result-ok{margin:0 1.5rem 1.5rem;padding:1rem;background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.2);border-radius:8px;font-family:'Space Mono',monospace;font-size:.8rem;color:#4ade80}
+.result-err{margin:0 1.5rem 1rem;padding:1rem;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:8px;font-family:'Space Mono',monospace;font-size:.75rem;color:#f87171;line-height:1.6}
+.events-list{padding:.8rem 1.2rem 1.2rem;display:flex;flex-direction:column;gap:.6rem}
+.event-card{display:flex;align-items:flex-start;gap:.9rem;padding:.8rem 1rem;background:rgba(255,255,255,.025);border-radius:8px}
+.event-icon{font-size:1.2rem;flex-shrink:0;margin-top:.1rem}
+.event-tipo{font-family:'Space Mono',monospace;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.event-desc{font-size:.85rem;color:var(--text);margin-top:.15rem}
+.event-fecha{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted);margin-top:.2rem}
+footer{text-align:center;padding:2rem;border-top:1px solid var(--border);font-family:'Space Mono',monospace;font-size:.75rem;color:var(--muted)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>Persistencia Políglota</h1><p>// Sistema de Inventario Rural · Bases de Datos II · Grupo 10</p></div>
+  <div class="badges">
+    <span class="hbadge pg">🐘 PostgreSQL · ACID</span>
+    <span class="hbadge mongo">🍃 MongoDB · BASE</span>
+    <span class="hbadge date">📅 24/05/2026 16:04</span>
+  </div>
+</header>
+<main>
+  <div class="grid-2">
+    <div class="card pg">
+      <div class="card-header"><span>📦</span><h2>Productos e Inventario</h2><span class="layer-badge pg">PostgreSQL</span></div>
+      <div class="table-wrap"><table><thead><tr><th>ID</th><th>Nombre</th><th>Precio</th><th>Stock</th><th>Mín.</th></tr></thead><tbody><tr class=""><td>1</td><td>Café Pergamino Húmedo</td><td>$12,500</td><td>480 </td><td>100</td></tr><tr class="alert"><td>2</td><td>Café Tostado Molido</td><td>$28,000</td><td>28 ⚠</td><td>50</td></tr><tr class=""><td>3</td><td>Panela en Bloque</td><td>$3,800</td><td>150 </td><td>80</td></tr><tr class="alert"><td>4</td><td>Miel de Abejas</td><td>$18,500</td><td>6 ⚠</td><td>20</td></tr><tr class=""><td>5</td><td>Cacao en Grano Seco</td><td>$14,200</td><td>160 </td><td>60</td></tr><tr class=""><td>6</td><td>cafe quindio</td><td>$23</td><td>45 </td><td>2</td></tr><tr class=""><td>7</td><td>cafe caqueta</td><td>$25</td><td>34 </td><td>3</td></tr></tbody></table></div>
+    </div>
+    <div class="card pg">
+      <div class="card-header"><span>💳</span><h2>Ventas Recientes</h2><span class="layer-badge pg">PostgreSQL</span></div>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>Cliente</th><th>Fecha</th><th>Total</th><th>Estado</th></tr></thead><tbody><tr><td>#3</td><td>Tienda Rural La Cosecha</td><td>2025-03-12</td><td>$225,000</td><td><span class="badge badge-yellow">pendiente</span></td></tr><tr><td>#2</td><td>Distribuidora El Macizo</td><td>2025-02-05</td><td>$394,000</td><td><span class="badge badge-green">completada</span></td></tr><tr><td>#1</td><td>Cooperativa Huila Verde</td><td>2025-01-20</td><td>$6,000,000</td><td><span class="badge badge-green">completada</span></td></tr></tbody></table></div>
+    </div>
+  </div>
+  <div class="trigger-box">
+    <div class="trigger-header">⚡  DEMO TRIGGER ACID — trg_descontar_stock · Atomicidad garantizada</div>
+    <pre class="sql-code"><span class="cmt">-- El trigger verifica stock antes de descontar.</span>
+<span class="cmt">-- Si stock &lt; cantidad → ROLLBACK automático (Atomicidad ACID).</span>
+
+<span class="kw">INSERT INTO</span> detalle_venta(venta_id, producto_id, cantidad, precio_unitario)
+<span class="kw">VALUES</span> (1, 1, 999999, 12500);</pre>
+    <div class="result-err">✘  ERROR: Stock insuficiente — pedido=999999 &gt; stock disponible<br>&nbsp;&nbsp;&nbsp;→ Transacción revertida por completo (ROLLBACK)</div>
+    <div class="result-ok">✔  Stock sin cambios — Integridad preservada (Atomicidad ACID) ✔</div>
+  </div>
+  <div class="grid-2">
+    <div class="card mongo">
+      <div class="card-header"><span>🏭</span><h2>Lotes de Producción</h2><span class="layer-badge mongo">MongoDB</span></div>
+      <div class="table-wrap"><table><thead><tr><th>Prod.ID</th><th>Fecha</th><th>Cantidad</th><th>Calidad</th><th>Origen</th></tr></thead><tbody><tr><td>4</td><td>2025-03-18</td><td>60</td><td><span class="badge badge-green">alta</span></td><td>Apiario El Cedro, Palestina</td></tr><tr><td>5</td><td>2025-03-10</td><td>180</td><td><span class="badge badge-green">alta</span></td><td>Asociación Cacaotera del Macizo, San Agustín</td></tr><tr><td>3</td><td>2025-03-02</td><td>300</td><td><span class="badge badge-green">alta</span></td><td>Trapiche San Marcos, Isnos</td></tr><tr><td>2</td><td>2025-02-20</td><td>80</td><td><span class="badge badge-green">alta</span></td><td>Planta de tostión Grupo 10, Pitalito</td></tr><tr><td>1</td><td>2025-02-14</td><td>420</td><td><span class="badge badge-yellow">media</span></td><td>Finca La Esperanza, Acevedo</td></tr><tr><td>1</td><td>2025-01-08</td><td>600</td><td><span class="badge badge-green">alta</span></td><td>Vereda El Paraíso, Pitalito</td></tr></tbody></table></div>
+    </div>
+    <div class="card mongo">
+      <div class="card-header"><span>📋</span><h2>Historial de Eventos</h2><span class="layer-badge mongo">MongoDB</span></div>
+      <div class="events-list"><div class="event-card" style="border-left:4px solid #ef4444"><span class="event-icon">🚨</span><div><div class="event-tipo" style="color:#ef4444">ALERTA STOCK</div><div class="event-desc">Stock Miel de Abejas bajó del mínimo — 12 frascos disponibles, mínimo 20</div><div class="event-fecha">2025-03-18 14:30</div></div></div><div class="event-card" style="border-left:4px solid #3b82f6"><span class="event-icon">💳</span><div><div class="event-tipo" style="color:#3b82f6">VENTA</div><div class="event-desc">Venta #3 pendiente de pago — Tienda Rural La Cosecha, Acevedo</div><div class="event-fecha">2025-03-12 16:00</div></div></div><div class="event-card" style="border-left:4px solid #ef4444"><span class="event-icon">🚨</span><div><div class="event-tipo" style="color:#ef4444">ALERTA STOCK</div><div class="event-desc">Stock Café Tostado Molido bajó del mínimo — 38 kg disponibles, mínimo 50 kg</div><div class="event-fecha">2025-03-05 12:00</div></div></div><div class="event-card" style="border-left:4px solid #22c55e"><span class="event-icon">🏭</span><div><div class="event-tipo" style="color:#22c55e">PRODUCCION</div><div class="event-desc">Lote 300 kg Panela en Bloque — Trapiche San Marcos, Isnos</div><div class="event-fecha">2025-03-02 12:00</div></div></div><div class="event-card" style="border-left:4px solid #f59e0b"><span class="event-icon">🔧</span><div><div class="event-tipo" style="color:#f59e0b">AJUSTE INVENTARIO</div><div class="event-desc">Ajuste +40 kg Cacao en Grano Seco por diferencia en reconteo de bodega</div><div class="event-fecha">2025-02-03 13:00</div></div></div><div class="event-card" style="border-left:4px solid #3b82f6"><span class="event-icon">💳</span><div><div class="event-tipo" style="color:#3b82f6">VENTA</div><div class="event-desc">Venta #1 completada — Cooperativa Huila Verde, Pitalito</div><div class="event-fecha">2025-01-20 15:15</div></div></div><div class="event-card" style="border-left:4px solid #22c55e"><span class="event-icon">🏭</span><div><div class="event-tipo" style="color:#22c55e">PRODUCCION</div><div class="event-desc">Lote 600 kg Café Pergamino Húmedo registrado — Vereda El Paraíso</div><div class="event-fecha">2025-01-08 11:30</div></div></div></div>
+    </div>
+  </div>
+</main>
+<footer>Generado por <span style="color:var(--text)">demo_poliglota.py</span> · Grupo 10: <span style="color:var(--text)">Santiago Chavarro & Juan Pablo Sánchez</span> · 24/05/2026 16:04</footer>
+</body></html>

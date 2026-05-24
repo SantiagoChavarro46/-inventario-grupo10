@@ -1,0 +1,144 @@
+[{
+  "_id": {
+    "$oid": "6a13376cc044d950f34f13aa"
+  },
+  "tipo": "produccion",
+  "fecha": {
+    "$date": "2025-01-08T11:30:00.000Z"
+  },
+  "descripcion": "Lote 600 kg Café Pergamino Húmedo registrado — Vereda El Paraíso",
+  "producto_id": 1,
+  "usuario_id": 1,
+  "metadata": {
+    "cantidad_kg": 600,
+    "calidad": "alta",
+    "origen": "Vereda El Paraíso, Pitalito",
+    "variedad": "Castillo"
+  }
+},
+{
+  "_id": {
+    "$oid": "6a13376cc044d950f34f13ab"
+  },
+  "tipo": "venta",
+  "fecha": {
+    "$date": "2025-01-20T15:15:00.000Z"
+  },
+  "descripcion": "Venta #1 completada — Cooperativa Huila Verde, Pitalito",
+  "referencia_id": 1,
+  "usuario_id": 1,
+  "metadata": {
+    "cliente": "Cooperativa Huila Verde",
+    "total": 6000000,
+    "estado": "completada",
+    "productos_vendidos": [
+      {
+        "producto_id": 1,
+        "nombre": "Café Pergamino Húmedo",
+        "cantidad_kg": 480,
+        "precio_unitario": 12500
+      }
+    ]
+  }
+},
+{
+  "_id": {
+    "$oid": "6a13376cc044d950f34f13ac"
+  },
+  "tipo": "produccion",
+  "fecha": {
+    "$date": "2025-03-02T12:00:00.000Z"
+  },
+  "descripcion": "Lote 300 kg Panela en Bloque — Trapiche San Marcos, Isnos",
+  "producto_id": 3,
+  "usuario_id": 1,
+  "metadata": {
+    "cantidad_kg": 300,
+    "calidad": "alta",
+    "origen": "Trapiche San Marcos, Isnos",
+    "variedad_cana": "CC 85-92"
+  }
+},
+{
+  "_id": {
+    "$oid": "6a13376cc044d950f34f13ad"
+  },
+  "tipo": "ajuste_inventario",
+  "fecha": {
+    "$date": "2025-02-03T13:00:00.000Z"
+  },
+  "descripcion": "Ajuste +40 kg Cacao en Grano Seco por diferencia en reconteo de bodega",
+  "producto_id": 5,
+  "usuario_id": 1,
+  "metadata": {
+    "cantidad_anterior_kg": 140,
+    "cantidad_nueva_kg": 180,
+    "motivo": "Diferencia encontrada en conteo físico de bodega",
+    "responsable": "Encargado de bodega"
+  }
+},
+{
+  "_id": {
+    "$oid": "6a13376cc044d950f34f13ae"
+  },
+  "tipo": "alerta_stock",
+  "fecha": {
+    "$date": "2025-03-05T12:00:00.000Z"
+  },
+  "descripcion": "Stock Café Tostado Molido bajó del mínimo — 38 kg disponibles, mínimo 50 kg",
+  "producto_id": 2,
+  "metadata": {
+    "cantidad_actual_kg": 38,
+    "cantidad_minima_kg": 50,
+    "diferencia_kg": -12,
+    "accion_sugerida": "Programar nueva tostión de café pergamino"
+  }
+},
+{
+  "_id": {
+    "$oid": "6a13376cc044d950f34f13af"
+  },
+  "tipo": "alerta_stock",
+  "fecha": {
+    "$date": "2025-03-18T14:30:00.000Z"
+  },
+  "descripcion": "Stock Miel de Abejas bajó del mínimo — 12 frascos disponibles, mínimo 20",
+  "producto_id": 4,
+  "metadata": {
+    "cantidad_actual": 12,
+    "cantidad_minima": 20,
+    "diferencia": -8,
+    "accion_sugerida": "Contactar apicultor Apiario El Cedro para nueva cosecha"
+  }
+},
+{
+  "_id": {
+    "$oid": "6a13376cc044d950f34f13b0"
+  },
+  "tipo": "venta",
+  "fecha": {
+    "$date": "2025-03-12T16:00:00.000Z"
+  },
+  "descripcion": "Venta #3 pendiente de pago — Tienda Rural La Cosecha, Acevedo",
+  "referencia_id": 3,
+  "usuario_id": 1,
+  "metadata": {
+    "cliente": "Tienda Rural La Cosecha",
+    "total": 222000,
+    "estado": "pendiente",
+    "productos_vendidos": [
+      {
+        "producto_id": 3,
+        "nombre": "Panela en Bloque",
+        "cantidad_kg": 30,
+        "precio_unitario": 3800
+      },
+      {
+        "producto_id": 4,
+        "nombre": "Miel de Abejas",
+        "cantidad": 6,
+        "precio_unitario": 18500
+      }
+    ]
+  }
+}]

@@ -1,0 +1,124 @@
+[{
+  "_id": {
+    "$oid": "6a13376cc044d950f34f13a4"
+  },
+  "producto_id": 1,
+  "usuario_id": 1,
+  "fecha": {
+    "$date": "2025-01-08T00:00:00.000Z"
+  },
+  "cantidad_producida": 600,
+  "calidad": "alta",
+  "origen": "Vereda El Paraíso, Pitalito",
+  "notas": "Cosecha de mitaca, secado en marquesina",
+  "datos_variables": {
+    "variedad": "Castillo",
+    "temperatura_almacen": "18°C",
+    "humedad_relativa": "58%",
+    "proceso": "lavado",
+    "altitud_msnm": 1750
+  }
+},
+{
+  "_id": {
+    "$oid": "6a13376cc044d950f34f13a5"
+  },
+  "producto_id": 1,
+  "usuario_id": 1,
+  "fecha": {
+    "$date": "2025-02-14T00:00:00.000Z"
+  },
+  "cantidad_producida": 420,
+  "calidad": "media",
+  "origen": "Finca La Esperanza, Acevedo",
+  "notas": "Ligero retraso por lluvias, secado incompleto",
+  "datos_variables": {
+    "variedad": "Colombia",
+    "temperatura_almacen": "20°C",
+    "humedad_relativa": "65%",
+    "proceso": "natural",
+    "altitud_msnm": 1620
+  }
+},
+{
+  "_id": {
+    "$oid": "6a13376cc044d950f34f13a6"
+  },
+  "producto_id": 2,
+  "usuario_id": 1,
+  "fecha": {
+    "$date": "2025-02-20T00:00:00.000Z"
+  },
+  "cantidad_producida": 80,
+  "calidad": "alta",
+  "origen": "Planta de tostión Grupo 10, Pitalito",
+  "notas": "Tostión media, empacado al vacío",
+  "datos_variables": {
+    "nivel_tostion": "media",
+    "granulometria": "media-fina",
+    "empaque": "bolsa válvula 500g",
+    "fecha_vencimiento": "2025-08-20"
+  }
+},
+{
+  "_id": {
+    "$oid": "6a13376cc044d950f34f13a7"
+  },
+  "producto_id": 3,
+  "usuario_id": 1,
+  "fecha": {
+    "$date": "2025-03-02T00:00:00.000Z"
+  },
+  "cantidad_producida": 300,
+  "calidad": "alta",
+  "origen": "Trapiche San Marcos, Isnos",
+  "notas": "Panela sin aditivos, producción artesanal",
+  "datos_variables": {
+    "variedad_cana": "CC 85-92",
+    "rendimiento_litros_kg": 8.5,
+    "punto_coccion": "115°C",
+    "presentacion": "bloque 500g"
+  }
+},
+{
+  "_id": {
+    "$oid": "6a13376cc044d950f34f13a8"
+  },
+  "producto_id": 5,
+  "usuario_id": 1,
+  "fecha": {
+    "$date": "2025-03-10T00:00:00.000Z"
+  },
+  "cantidad_producida": 180,
+  "calidad": "alta",
+  "origen": "Asociación Cacaotera del Macizo, San Agustín",
+  "notas": "Grano fermentado 6 días, secado solar 12 días",
+  "datos_variables": {
+    "variedad": "CCN-51",
+    "dias_fermentacion": 6,
+    "humedad_porcentaje": 7.2,
+    "codigo_trazabilidad": "CACAO-MACIZO-2025-03",
+    "certificado_origen": true
+  }
+},
+{
+  "_id": {
+    "$oid": "6a13376cc044d950f34f13a9"
+  },
+  "producto_id": 4,
+  "usuario_id": 1,
+  "fecha": {
+    "$date": "2025-03-18T00:00:00.000Z"
+  },
+  "cantidad_producida": 60,
+  "calidad": "alta",
+  "origen": "Apiario El Cedro, Palestina",
+  "notas": "Cosecha de temporada seca, miel multifloral",
+  "datos_variables": {
+    "tipo_flora": "multifloral",
+    "humedad_porcentaje": 18.3,
+    "brix": 81.2,
+    "presentacion": "frasco vidrio 500g",
+    "lote_apicultor": "APM-2025-01"
+  }
+}]
